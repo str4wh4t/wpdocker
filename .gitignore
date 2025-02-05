@@ -1,0 +1,5 @@
+conf/*
+db/*
+logs/*
+wp-content/*
+redis/*

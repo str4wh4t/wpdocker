@@ -1,0 +1,62 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: akuakultur-db
+    ports:
+      - "127.0.0.1:3382:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: b7HSuC5tJmF3haEDLpGMjn
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - akuakultur-bridge
+
+  ols:
+    image: litespeedtech/openlitespeed:latest
+    platform: linux/amd64
+    container_name: akuakultur-ols
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: b7HSuC5tJmF3haEDLpGMjn
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "127.0.0.1:82:80"       # HTTP
+      - "127.0.0.1:8243:443"      # HTTPS
+      - "7082:7080"  # LS-WEBADMIN
+    volumes:
+      - ./wordpress:/var/www/vhosts/localhost/html
+      - ./wp-content:/var/www/vhosts/localhost/html/wp-content
+      - ./conf:/usr/local/lsws/conf      # Konfigurasi OpenLiteSpeed
+      - ./logs:/usr/local/lsws/logs      # Log OpenLiteSpeed
+    depends_on:
+      - db
+    networks:
+      - akuakultur-bridge
+
+  redis:
+    image: redis:latest
+    container_name: akuakultur-redis
+    ports:
+      - "127.0.0.1:6382:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - ./redis:/data
+    networks:
+      - akuakultur-bridge
+
+  adminer:
+    image: adminer
+    container_name: akuakultur-adminer
+    restart: always
+    ports:
+      - 127.0.0.1:8982:8080
+    networks:
+      - akuakultur-bridge
+
+networks:
+  akuakultur-bridge:
+    external: true
