@@ -87,6 +87,13 @@ define( 'NONCE_SALT',       '{xeHrQc(NMHVQ.r+E4x{B:zJ#RBl&Kf,Z9V|-ps89,Flw,fy}@a
 
 /**#@-*/
 
+define( 'NEXT3_SETTINGS', serialize( array(
+    'provider' => 'objects',
+    'access-key-id' => 'Oo2S1B5Y2DrUYEN5RLiN',
+    'secret-access-key' => 'J15eXw8akqohpaa8QxMepKNNvHJ7OPzeC5W9Ce8M',
+    'endpoint' => 'https://disk.undip.ac.id',
+) ) );
+
 /**
  * WordPress database table prefix.
  *
